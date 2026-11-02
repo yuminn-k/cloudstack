@@ -104,7 +104,7 @@ export default {
     {
       api: 'createAccount',
       icon: 'plus-outlined',
-      label: 'label.add.new.tenant.account',
+      label: 'label.add.tenant.account',
       listView: true,
       popup: true,
       component: shallowRef(defineAsyncComponent(() => import('@/views/iam/AddAccount.vue')))
