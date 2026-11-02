@@ -1946,7 +1946,7 @@ public class StorageManagerImpl extends ManagerBase implements StorageManager, C
     }
 
     @Override
-    public void cleanupStorage(boolean recurring) {
+    public void cleanupStorage() {
         GlobalLock scanLock = GlobalLock.getInternLock("storagemgr.cleanup");
 
         try {
@@ -1987,7 +1987,7 @@ public class StorageManagerImpl extends ManagerBase implements StorageManager, C
                     }
 
                     cleanupSnapshotsFromStoreRefInDestroyingState();
-                    cleanupSecondaryStorage(recurring);
+                    cleanupSecondaryStorage();
 
                     List<VolumeVO> vols = volumeDao.listVolumesToBeDestroyed(new Date(System.currentTimeMillis() - ((long)StorageCleanupDelay.value() << 10)));
                     List<Long> rootVolumeVmIds = vols.stream()
@@ -2269,7 +2269,7 @@ public class StorageManagerImpl extends ManagerBase implements StorageManager, C
 
     @Override
     @DB
-    public void cleanupSecondaryStorage(boolean recurring) {
+    public void cleanupSecondaryStorage() {
         // NOTE that object_store refactor will immediately delete the object from secondary storage when deleteTemplate etc api is issued.
         // so here we don't need to issue DeleteCommand to resource anymore, only need to remove db entry.
         try {
@@ -2944,7 +2944,7 @@ public class StorageManagerImpl extends ManagerBase implements StorageManager, C
             try {
                 logger.trace("Storage Garbage Collection Thread is running.");
 
-                cleanupStorage(true);
+                cleanupStorage();
 
             } catch (Exception e) {
                 logger.error("Caught the following Exception", e);
@@ -3700,16 +3700,6 @@ public class StorageManagerImpl extends ManagerBase implements StorageManager, C
     public synchronized boolean registerHostListener(String providerName, HypervisorHostListener listener) {
         hostListeners.put(providerName, listener);
         return true;
-    }
-
-    @Override
-    public Answer sendToPool(long poolId, Command cmd) throws StorageUnavailableException {
-        return null;
-    }
-
-    @Override
-    public Answer[] sendToPool(long poolId, Commands cmd) throws StorageUnavailableException {
-        return null;
     }
 
     @Override
