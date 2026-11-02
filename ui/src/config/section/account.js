@@ -111,9 +111,8 @@ export default {
     },
     {
       api: 'createUser',
-      icon: 'usergroup-add-outlined',
+      icon: 'user-add-outlined',
       label: 'label.add.user',
-      listView: true,
       dataView: true,
       popup: true,
       show: (record, store) => {
